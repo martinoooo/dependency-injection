@@ -1,0 +1,19 @@
+{
+  "name": "mydi",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "npm run build:live",
+    "build": "tsc",
+    "build:live": "nodemon --watch 'src/**/*.ts' --exec \"ts-node\" src/index.ts"
+  },
+  "dependencies": {
+    "reflect-metadata": "^0.1.13",
+    "typescript": "^4.0.3"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4",
+    "ts-node": "^9.0.0"
+  }
+}
