@@ -1,4 +1,8 @@
-import "reflect-metadata";
+import 'reflect-metadata';
+
+export { Container } from './core/container';
+export { Factory } from './core/factory';
+export { Service } from './decorators/service';
 
 // @Reflect.metadata('inClass', 'A')
 // class Test {
@@ -47,32 +51,6 @@ import "reflect-metadata";
 // console.log(Reflect.getMetadata('classMetaData', SomeClass)); // 'a'
 // console.log(Reflect.getMetadata('methodMetaData', new SomeClass(), 'someMethod')); // 'b'
 
-// type Constructor<T = any> = new (...args: any[]) => T;
-
-// const Injectable = (): ClassDecorator => target => {};
-
-// class OtherService {
-//   a = 1;
-// }
-
-// @Injectable()
-// class TestService {
-//   constructor(public readonly otherService: OtherService) {}
-
-//   testMethod() {
-//     console.log(this.otherService.a);
-//   }
-// }
-
-// const Factory = <T>(target: Constructor<T>): T => {
-//   // 获取所有注入的服务
-//   const providers = Reflect.getMetadata('design:paramtypes', target); // [OtherService]
-//   const args = providers.map((provider: Constructor) => new provider());
-//   return new target(...args);
-// };
-
-// Factory(TestService).testMethod(); // 1
-
 // const METHOD_METADATA = 'method';
 // const PATH_METADATA = 'path';
 
@@ -91,7 +69,6 @@ import "reflect-metadata";
 
 // const Get = createMappingDecorator('GET');
 // const Post = createMappingDecorator('POST');
-
 
 // @Controller('/test')
 // class SomeClass {
