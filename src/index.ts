@@ -1,7 +1,6 @@
 import 'reflect-metadata';
 
 export { Container } from './core/container';
-export { Factory } from './core/factory';
 export { Service } from './decorators/service';
 
 // @Reflect.metadata('inClass', 'A')

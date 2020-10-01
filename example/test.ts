@@ -1,17 +1,12 @@
 import 'reflect-metadata';
-import { Service, Factory } from '../src';
+import { Container } from '../src';
 
-class OtherService {
-  a = 1;
-}
-
-@Service()
-class TestService {
-  constructor(public readonly otherService: OtherService) {}
-
-  testMethod() {
-    console.log(this.otherService.a);
+export class Duck {
+  bark() {
+    console.log('barking');
   }
 }
 
-Factory(TestService).testMethod(); // 1
+Container.registry(Duck);
+let carFactory = Container.get<Duck>(Duck);
+carFactory.bark();

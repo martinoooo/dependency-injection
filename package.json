@@ -6,7 +6,7 @@
   "scripts": {
     "start": "npm run build:live",
     "build": "tsc",
-    "build:live": "nodemon --watch 'src/**/*.ts' --watch 'sample/**/*.ts' --exec \"ts-node\" example/test.ts"
+    "build:live": "nodemon --watch 'src/**/*.ts' --watch 'example/**/*.ts' --exec \"ts-node\" example/test.ts"
   },
   "dependencies": {
     "reflect-metadata": "^0.1.13",
