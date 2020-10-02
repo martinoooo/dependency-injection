@@ -19,13 +19,23 @@ describe('Container', function () {
       expect(duck.bark()).toEqual('barking');
     });
 
-    it('can registy a class with a instance', function () {
-      const duckset = new Duck();
-      Container.registry(Duck, duckset);
-      let duck = Container.get<Duck>(Duck);
+    it('can registy a token with a instance', function () {
+      const duckins = new Duck();
+      Container.registry('duck', duckins);
+      let duck = Container.get<Duck>('duck');
 
-      expect(duck).toBe(duckset);
+      expect(duck).toBe(duckins);
       expect(duck.bark()).toEqual('barking');
+    });
+
+    it('should registry a new instance if set twice', function () {
+      const duckins = new Duck();
+      Container.registry(Duck, duckins);
+      expect(Container.get<Duck>(Duck)).toBe(duckins);
+
+      const duckins2 = new Duck();
+      Container.registry(Duck, duckins2);
+      expect(Container.get<Duck>(Duck)).toBe(duckins2);
     });
   });
 });

@@ -1,29 +1,35 @@
-import { Constructor } from './declares';
+import { Constructor, Token, InjectVal } from './declares';
+import { isFunction } from '../utils';
 
 export class BaseDIContainer {
-  private services = new Map<Constructor, any>();
+  private services = new Map<Token, InjectVal>();
 
-  public registry(itfc: Constructor, val: any) {
-    this.services.set(itfc, val);
+  public registry(token: Token, val: InjectVal) {
+    this.services.set(token, val);
   }
 
-  public get<T>(itfc: Constructor): T {
-    const value = this.services.get(itfc);
-    if (!value) {
-      return this.createInstance<T>(itfc);
+  public get<T>(token: Token): T {
+    const value = this.services.get(token);
+    if (value) {
+      const { imp, instance } = value;
+      // TODO: if instance is null ?
+      if (!instance) {
+        return this.createInstance<T>(token, imp);
+      }
+      return instance;
     }
-    return value;
+    throw new Error('没有获取到token的值');
   }
 
   public reset() {
     this.services.clear();
   }
 
-  private createInstance<T>(key: Constructor): T {
-    const providers = Reflect.getMetadata('design:paramtypes', key) || [];
+  private createInstance<T>(key: Token, imp: Constructor): T {
+    const providers = Reflect.getMetadata('design:paramtypes', imp) || [];
     const args = providers.map((provider: Constructor) => new provider());
-    const value = new key(...args);
-    this.registry(key, value);
+    const value = new imp(...args);
+    this.registry(key, { imp, instance: value });
     return value;
   }
 }
