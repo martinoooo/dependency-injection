@@ -9,10 +9,14 @@ export class BaseDIContainer {
 
   public get<T>(itfc: Constructor): T {
     const value = this.services.get(itfc);
-    if (value === null) {
+    if (!value) {
       return this.createInstance<T>(itfc);
     }
     return value;
+  }
+
+  public reset() {
+    this.services.clear();
   }
 
   private createInstance<T>(key: Constructor): T {
