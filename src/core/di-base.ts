@@ -12,8 +12,7 @@ export class BaseDIContainer {
     const value = this.services.get(token);
     if (value) {
       const { imp, instance } = value;
-      // TODO: if instance is null ?
-      if (!instance) {
+      if (instance === undefined) {
         return this.createInstance<T>(token, imp);
       }
       return instance;

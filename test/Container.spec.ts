@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { Service, Container } from '../src';
+import { Service, Container, Inject } from '../src';
 
 describe('Container', function () {
   beforeEach(() => Container.clear());
@@ -36,6 +36,29 @@ describe('Container', function () {
       const duckins2 = new Duck();
       Container.registry(Duck, duckins2);
       expect(Container.get<Duck>(Duck)).toBe(duckins2);
+    });
+
+    it('should throw err when get unregistried token', function () {
+      expect(() => Container.get<Duck>(Duck)).toThrowError(Error);
+    });
+
+    it('should use the registried instance', function () {
+      class DuckFac {
+        @Inject()
+        duck: Duck;
+
+        getDuck() {
+          return this.duck;
+        }
+      }
+
+      Container.registry(Duck);
+      let duck = Container.get<Duck>(Duck);
+
+      Container.registry(DuckFac);
+      let duckFac = Container.get<DuckFac>(DuckFac);
+
+      expect(duckFac.getDuck()).toBe(duck);
     });
   });
 });
