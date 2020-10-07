@@ -11,54 +11,54 @@ describe('Container', function () {
       }
     }
 
-    it('can registy a class', function () {
-      Container.registry(Duck);
-      let duck = Container.get<Duck>(Duck);
+    // it('can registy a class', function () {
+    //   Container.registry(Duck);
+    //   let duck = Container.get<Duck>(Duck);
 
-      expect(duck).toBeInstanceOf(Duck);
-      expect(duck.bark()).toEqual('barking');
-    });
+    //   expect(duck).toBeInstanceOf(Duck);
+    //   expect(duck.bark()).toEqual('barking');
+    // });
 
-    it('can registy a token with a instance', function () {
-      const duckins = new Duck();
-      Container.registry('duck', duckins);
-      let duck = Container.get<Duck>('duck');
+    // it('can registy a token with a instance', function () {
+    //   const duckins = new Duck();
+    //   Container.registry('duck', duckins);
+    //   let duck = Container.get<Duck>('duck');
 
-      expect(duck).toBe(duckins);
-      expect(duck.bark()).toEqual('barking');
-    });
+    //   expect(duck).toBe(duckins);
+    //   expect(duck.bark()).toEqual('barking');
+    // });
 
-    it('should registry a new instance if set twice', function () {
-      const duckins = new Duck();
-      Container.registry(Duck, duckins);
-      expect(Container.get<Duck>(Duck)).toBe(duckins);
+    // it('should registry a new instance if set twice', function () {
+    //   const duckins = new Duck();
+    //   Container.registry(Duck, duckins);
+    //   expect(Container.get<Duck>(Duck)).toBe(duckins);
 
-      const duckins2 = new Duck();
-      Container.registry(Duck, duckins2);
-      expect(Container.get<Duck>(Duck)).toBe(duckins2);
-    });
+    //   const duckins2 = new Duck();
+    //   Container.registry(Duck, duckins2);
+    //   expect(Container.get<Duck>(Duck)).toBe(duckins2);
+    // });
 
-    it('should throw err when get unregistried token', function () {
-      expect(() => Container.get<Duck>(Duck)).toThrowError(Error);
-    });
+    // it('should throw err when get unregistried token', function () {
+    //   expect(() => Container.get<Duck>(Duck)).toThrowError(Error);
+    // });
 
-    it('should use the registried instance', function () {
-      class DuckFac {
-        @Inject()
-        duck: Duck;
+    // it('should use the registried instance', function () {
+    //   class DuckFac {
+    //     @Inject()
+    //     duck: Duck;
 
-        getDuck() {
-          return this.duck;
-        }
-      }
+    //     getDuck() {
+    //       return this.duck;
+    //     }
+    //   }
 
-      Container.registry(Duck);
-      let duck = Container.get<Duck>(Duck);
+    //   Container.registry(Duck);
+    //   let duck = Container.get<Duck>(Duck);
 
-      Container.registry(DuckFac);
-      let duckFac = Container.get<DuckFac>(DuckFac);
+    //   Container.registry(DuckFac);
+    //   let duckFac = Container.get<DuckFac>(DuckFac);
 
-      expect(duckFac.getDuck()).toBe(duck);
-    });
+    //   expect(duckFac.getDuck()).toBe(duck);
+    // });
   });
 });
