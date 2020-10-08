@@ -3,7 +3,7 @@ export type Constructor<T = any> = new (...args: any[]) => T;
 
 export type ClassDecorator = <T extends { new (...args: any[]): {} }>(target: T) => T | void;
 
-export type Token = Constructor | string;
+export type Token = Constructor | string | Symbol;
 
 export interface InjectVal {
   imp: any;
@@ -21,6 +21,12 @@ export interface ScopeConfig {
   providers: Constructor[];
   consumers: Constructor[];
 }
+
+export interface DepsConfig {
+  propertyKey: string;
+  typeName: any;
+}
+
 // export interface IRegisterConfig<K, V, ID extends ScopeID, DEPTS extends any[] = []> {
 //   token: InjectToken<K>;
 //   imp: Implement<V, ID, DEPTS>;
