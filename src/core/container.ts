@@ -6,7 +6,6 @@ const default_container = Symbol('defalut');
 export class Container {
   private static readonly dicontainer: BaseDIContainer = new BaseDIContainer(default_container);
   private static readonly scopes = new Map<Token, ScopeConfig>();
-  private static readonly deps = new Map<Object, DepsConfig[]>();
 
   static registryScope(scopeid: Constructor, config: ScopeConfig): void {
     this.scopes.set(scopeid, config);
@@ -46,16 +45,6 @@ export class Container {
         throw new Error('还未注册该module');
       }
     }
-  }
-
-  static registryDeps(key: Object, val: any) {
-    const v = this.deps.get(key);
-    const value = (v || []).concat([val]);
-    this.deps.set(key, value);
-  }
-
-  static getDeps(key: Object): DepsConfig[] {
-    return this.deps.get(key) || [];
   }
 
   static clear() {

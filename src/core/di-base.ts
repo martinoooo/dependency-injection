@@ -1,6 +1,5 @@
-import { Constructor, Token, InjectVal, DepsConfig } from './declares';
+import { Constructor, Token, InjectVal, DepsConfig, depsMetadata } from './declares';
 import { Container } from './container';
-import { collapseTextChangeRangesAcrossMultipleVersions } from 'typescript';
 
 export class BaseDIContainer {
   private services = new Map<Token, InjectVal>();
@@ -32,7 +31,7 @@ export class BaseDIContainer {
 
   private createInstance<T>(key: Token, imp: Constructor): T {
     const providers = Reflect.getMetadata('design:paramtypes', imp) || [];
-    const args = providers.map((provider: Constructor) => new provider());
+    const args = providers.map((provider: Constructor) => Container.get(this.scopeid, provider));
     const ins = new imp(...args);
     this.setInjectVal(imp, ins);
     this.registry(key, { imp, instance: ins });
@@ -40,7 +39,7 @@ export class BaseDIContainer {
   }
 
   private setInjectVal(imp: Function, instance: { [key: string]: any }) {
-    const deps = Container.getDeps(imp);
+    const deps: DepsConfig[] = Reflect.getMetadata(depsMetadata, imp.prototype) || [];
     deps.forEach(dep => {
       const v = Container.get(this.scopeid, dep.typeName);
       instance[dep.propertyKey] = v;

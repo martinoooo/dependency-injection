@@ -12,20 +12,21 @@ export interface InjectVal {
 
 export interface ModuleConfig {
   providers?: Constructor[];
-  consumers?: Constructor[];
 }
 
 export interface ScopeConfig {
   scope: BaseDIContainer;
   imp: any;
   providers: Constructor[];
-  consumers: Constructor[];
 }
 
 export interface DepsConfig {
   propertyKey: string;
   typeName: any;
 }
+
+
+export const depsMetadata = Symbol("depsMetadata");
 
 // export interface IRegisterConfig<K, V, ID extends ScopeID, DEPTS extends any[] = []> {
 //   token: InjectToken<K>;

@@ -1,9 +1,7 @@
 import 'reflect-metadata';
 import { Container, Inject, Module, Service } from '../src';
 
-describe('Container', function () {
-  // beforeEach(() => Container.clear());
-
+describe('Module', function () {
   describe('registry', () => {
     @Service()
     class Provider {
@@ -22,12 +20,18 @@ describe('Container', function () {
     }
 
     @Module({
-      providers: [Provider],
-      consumers: [Consumer],
+      providers: [Provider, Consumer],
     })
     class App {
+      @Inject()
+      private consumer: Consumer;
+
       init() {
         return "I'm init";
+      }
+
+      read() {
+        return this.consumer.read();
       }
     }
 
@@ -37,9 +41,9 @@ describe('Container', function () {
     });
 
     it('the service got from the module is different from the global', function () {
-      const provider = Container.get<Provider>(App, Provider);
-      const provider2 = Container.get<Provider>(Provider);
-      expect(provider).not.toBe(provider2);
+      const provider_in_module = Container.get<Provider>(App, Provider);
+      const provider_in_global = Container.get<Provider>(Provider);
+      expect(provider_in_module).not.toBe(provider_in_global);
     });
 
     it('can registry the service in module', function () {
@@ -50,6 +54,9 @@ describe('Container', function () {
     it('Inject works well', function () {
       const consumer = Container.get<Provider>(App, Consumer);
       expect(consumer.read()).toBe('read');
+
+      const app = Container.get<App>(App);
+      expect(app.read()).toBe('read');
     });
   });
 });
