@@ -22,15 +22,9 @@ export interface ScopeConfig {
 
 export interface DepsConfig {
   propertyKey: string;
-  typeName: any;
+  typeName: () => Constructor;
 }
 
+export const depsMetadata = Symbol('depsMetadata');
 
-export const depsMetadata = Symbol("depsMetadata");
-
-// export interface IRegisterConfig<K, V, ID extends ScopeID, DEPTS extends any[] = []> {
-//   token: InjectToken<K>;
-//   imp: Implement<V, ID, DEPTS>;
-//   scope: InjectScope;
-//   depts?: DEPTS;
-// }
+export const defaultContainer = Symbol('defalut');

@@ -1,10 +1,8 @@
-import { Constructor, Token, ScopeConfig, DepsConfig } from './declares';
+import { Constructor, Token, ScopeConfig, defaultContainer } from './declares';
 import { BaseDIContainer } from './di-base';
 
-const default_container = Symbol('defalut');
-
 export class Container {
-  private static readonly dicontainer: BaseDIContainer = new BaseDIContainer(default_container);
+  private static readonly dicontainer: BaseDIContainer = new BaseDIContainer(defaultContainer);
   private static readonly scopes = new Map<Token, ScopeConfig>();
 
   static registryScope(scopeid: Constructor, config: ScopeConfig): void {
@@ -22,7 +20,7 @@ export class Container {
   static get<T>(scopeid: Constructor): T;
   static get<T>(scopeid: Constructor, token: Token): T;
   static get<T>(scopeid: Token, token?: Token): T {
-    if (token && scopeid === default_container) {
+    if (token && scopeid === defaultContainer) {
       scopeid = token;
       token = undefined;
     }
@@ -42,12 +40,13 @@ export class Container {
         if (scopeConfig) {
           return scopeConfig.scope.get(scopeid);
         }
-        throw new Error('还未注册该module');
+        throw new Error(`还未注册该module ${scopeid}`);
       }
     }
   }
 
   static clear() {
     this.dicontainer.reset();
+    this.scopes.clear();
   }
 }

@@ -33,15 +33,15 @@ export class BaseDIContainer {
     const providers = Reflect.getMetadata('design:paramtypes', imp) || [];
     const args = providers.map((provider: Constructor) => Container.get(this.scopeid, provider));
     const ins = new imp(...args);
-    this.setInjectVal(imp, ins);
     this.registry(key, { imp, instance: ins });
+    this.setInjectVal(imp, ins);
     return ins;
   }
 
   private setInjectVal(imp: Function, instance: { [key: string]: any }) {
     const deps: DepsConfig[] = Reflect.getMetadata(depsMetadata, imp.prototype) || [];
     deps.forEach(dep => {
-      const v = Container.get(this.scopeid, dep.typeName);
+      const v = Container.get(this.scopeid, dep.typeName());
       instance[dep.propertyKey] = v;
     });
   }
