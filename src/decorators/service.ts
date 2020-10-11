@@ -1,8 +1,13 @@
 import { Container } from '../core/container';
-import { ClassDecorator } from '../core/declares';
+import { ClassDecorator, ServiceConfig } from '../core/declares';
 
-export function Service(): ClassDecorator {
+export function Service(config?: ServiceConfig): ClassDecorator {
   return function (target) {
-    Container.registry(target);
+    const { token } = config || {};
+    if (token) {
+      Container.registry(token, { imp: target, instance: undefined });
+    } else {
+      Container.registry(target);
+    }
   };
 }

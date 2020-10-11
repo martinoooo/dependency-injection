@@ -1,4 +1,4 @@
-import { Constructor, Token, ScopeConfig, defaultContainer } from './declares';
+import { Constructor, Token, ScopeConfig, defaultContainer, InjectVal } from './declares';
 import { BaseDIContainer } from './di-base';
 
 export class Container {
@@ -9,16 +9,14 @@ export class Container {
     this.scopes.set(scopeid, config);
   }
 
-  static registry(token: Constructor): void;
-  static registry(token: string, instance: any): void;
-  static registry(token: Constructor, instance: any): void;
-  static registry(token: Token, instance?: any): void {
-    this.dicontainer.registry(token, { imp: token, instance });
+  static registry(token: Token, injectval?: InjectVal): void {
+    if (injectval) {
+      this.dicontainer.registry(token, injectval);
+    } else {
+      this.dicontainer.registry(token, { imp: token });
+    }
   }
 
-  static get<T>(token: Token): T;
-  static get<T>(scopeid: Constructor): T;
-  static get<T>(scopeid: Constructor, token: Token): T;
   static get<T>(scopeid: Token, token?: Token): T {
     if (token && scopeid === defaultContainer) {
       scopeid = token;

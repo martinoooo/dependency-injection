@@ -174,8 +174,8 @@ describe('simple-service', function () {
       expect(driver.driveCar()).toBe('Im driving the car');
 
       // provide fake implementations
-      Container.registry(Bus, new FakeBus());
-      Container.registry(Car, new FakeCar());
+      Container.registry(Bus, { instance: new FakeBus() });
+      Container.registry(Car, { instance: new FakeCar() });
 
       Container.registry(Driver);
       driver = Container.get<Driver>(Driver);
@@ -228,6 +228,7 @@ describe('simple-service', function () {
         log(message: string): void;
       }
 
+      // TODO: DELETE service
       @Service()
       class ConsoleLogger implements LoggerInterface {
         log(message: string) {

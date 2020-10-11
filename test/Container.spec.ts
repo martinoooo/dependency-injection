@@ -21,7 +21,7 @@ describe('Container', function () {
 
     it('can registy a token with a instance', function () {
       const duckins = new Duck();
-      Container.registry('duck', duckins);
+      Container.registry('duck', { instance: duckins });
       let duck = Container.get<Duck>('duck');
 
       expect(duck).toBe(duckins);
@@ -30,11 +30,11 @@ describe('Container', function () {
 
     it('should registry a new instance if set twice', function () {
       const duckins = new Duck();
-      Container.registry(Duck, duckins);
+      Container.registry(Duck, { instance: duckins });
       expect(Container.get<Duck>(Duck)).toBe(duckins);
 
       const duckins2 = new Duck();
-      Container.registry(Duck, duckins2);
+      Container.registry(Duck, { instance: duckins2 });
       expect(Container.get<Duck>(Duck)).toBe(duckins2);
     });
 

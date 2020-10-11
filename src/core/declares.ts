@@ -3,11 +3,11 @@ export type Constructor<T = any> = new (...args: any[]) => T;
 
 export type ClassDecorator = <T extends { new (...args: any[]): {} }>(target: T) => T | void;
 
-export type Token = Constructor | string | Symbol;
+export type Token = Constructor | string | Symbol | number;
 
 export interface InjectVal {
-  imp: any;
-  instance: any;
+  imp?: any;
+  instance?: any;
 }
 
 export interface ModuleConfig {
@@ -18,6 +18,10 @@ export interface ScopeConfig {
   scope: BaseDIContainer;
   imp: any;
   providers: Constructor[];
+}
+
+export interface ServiceConfig {
+  token: Token;
 }
 
 export interface DepsConfig {
