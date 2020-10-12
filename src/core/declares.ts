@@ -5,10 +5,20 @@ export type ClassDecorator = <T extends { new (...args: any[]): {} }>(target: T)
 
 export type Token = Constructor | string | Symbol | number;
 
-export interface InjectVal {
+export interface RegistryConfig {
   imp?: any;
   instance?: any;
+  transient?: boolean;
 }
+
+export interface InjectConfig {
+  token?: Token;
+}
+
+export type DepsConfig = InjectConfig & {
+  propertyKey: string;
+  typeName: () => Constructor;
+};
 
 export interface ModuleConfig {
   providers?: Constructor[];
@@ -21,12 +31,8 @@ export interface ScopeConfig {
 }
 
 export interface ServiceConfig {
-  token: Token;
-}
-
-export interface DepsConfig {
-  propertyKey: string;
-  typeName: () => Constructor;
+  token?: Token;
+  transient?: boolean;
 }
 
 export const depsMetadata = Symbol('depsMetadata');

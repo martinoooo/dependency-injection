@@ -1,24 +1,24 @@
-import { Constructor, Token, InjectVal, DepsConfig, depsMetadata } from './declares';
+import { Constructor, Token, RegistryConfig, DepsConfig, depsMetadata } from './declares';
 import { Container } from './container';
 
 export class BaseDIContainer {
-  private services = new Map<Token, InjectVal>();
+  private services = new Map<Token, RegistryConfig>();
   scopeid: any;
 
   constructor(scopeid: Token) {
     this.scopeid = scopeid;
   }
 
-  public registry(token: Token, val: InjectVal) {
+  public registry(token: Token, val: RegistryConfig) {
     this.services.set(token, val);
   }
 
   public get<T>(token: Token): T {
     const value = this.services.get(token);
     if (value) {
-      const { imp, instance } = value;
-      if (instance === undefined) {
-        return this.createInstance<T>(token, imp);
+      const { instance, transient } = value;
+      if (instance === undefined || transient) {
+        return this.createInstance<T>(token, value);
       }
       return instance;
     }
@@ -29,11 +29,12 @@ export class BaseDIContainer {
     this.services.clear();
   }
 
-  private createInstance<T>(key: Token, imp: Constructor): T {
+  private createInstance<T>(token: Token, value: RegistryConfig): T {
+    const { imp } = value;
     const providers = Reflect.getMetadata('design:paramtypes', imp) || [];
     const args = providers.map((provider: Constructor) => Container.get(this.scopeid, provider));
     const ins = new imp(...args);
-    this.registry(key, { imp, instance: ins });
+    this.registry(token, { ...value, instance: ins });
     this.setInjectVal(imp, ins);
     return ins;
   }

@@ -126,6 +126,86 @@ describe('simple-service', function () {
     });
   });
 
+  describe('test5', () => {
+    it('named-services', function () {
+      interface Factory {
+        create(): string;
+      }
+
+      @Service({ token: 'body.factory' })
+      class BodyFactory implements Factory {
+        color: number;
+
+        create() {
+          return 'body with color ' + this.color + ' is created';
+        }
+      }
+
+      @Service({ token: 'engine.factory' })
+      class EngineFactory implements Factory {
+        private series: string = '0000';
+
+        setSeries(series: string) {
+          this.series = series;
+        }
+
+        getSeries(): string {
+          return this.series;
+        }
+
+        create() {
+          return 'engine ' + this.series + ' is created';
+        }
+      }
+
+      @Service({ token: 'wheel.factory' })
+      class WheelFactory implements Factory {
+        size: number;
+
+        create() {
+          return 'wheel with size ' + this.size + ' is created';
+        }
+      }
+
+      @Service({ token: 'car.factory' })
+      class CarFactory {
+        @Inject({ token: 'wheel.factory' })
+        private wheelFactory: Factory;
+
+        @Inject({ token: 'engine.factory' })
+        private engineFactory: Factory;
+
+        @Inject({ token: 'body.factory' })
+        private bodyFactory: Factory;
+
+        constructor() {}
+
+        create() {
+          return `Creating a car: ${this.engineFactory.create()}, ${this.bodyFactory.create()}, ${this.wheelFactory.create()}, car created`;
+        }
+      }
+
+      // we need to import all services we need to make sure they are injected properly
+
+      // setup services
+
+      let bodyFactory = Container.get<BodyFactory>('body.factory');
+      bodyFactory.color = 333;
+
+      let wheelFactory = Container.get<WheelFactory>('wheel.factory');
+      wheelFactory.size = 20;
+
+      let engineFactory = Container.get<EngineFactory>('engine.factory');
+      engineFactory.setSeries('3000');
+      // create a car using car factory
+
+      let carFactory = Container.get<CarFactory>('car.factory');
+      expect(carFactory.create()).toBe(
+        'Creating a car: engine 3000 is created, body with color 333 is created, wheel with size 20 is created, car created'
+      );
+    });
+  });
+
   describe('test6', () => {
     it('test6', function () {
       @Service()
@@ -258,7 +338,7 @@ describe('simple-service', function () {
       }
 
       function Logger() {
-        return Inject(() => ConsoleLogger);
+        return Inject({ token: ConsoleLogger });
       }
 
       const userRepository = Container.get<UserRepository>(UserRepository);

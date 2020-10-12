@@ -1,4 +1,4 @@
-import { Constructor, Token, ScopeConfig, defaultContainer, InjectVal } from './declares';
+import { Constructor, Token, ScopeConfig, defaultContainer, RegistryConfig } from './declares';
 import { BaseDIContainer } from './di-base';
 
 export class Container {
@@ -9,7 +9,7 @@ export class Container {
     this.scopes.set(scopeid, config);
   }
 
-  static registry(token: Token, injectval?: InjectVal): void {
+  static registry(token: Token, injectval?: RegistryConfig): void {
     if (injectval) {
       this.dicontainer.registry(token, injectval);
     } else {
@@ -33,7 +33,7 @@ export class Container {
       try {
         return this.dicontainer.get<T>(scopeid);
       } catch {
-        // if not in dicontainer, that means it's not a service;
+        // if not in dicontainer, that means it's not a service, it'a a module;
         const scopeConfig = this.scopes.get(scopeid);
         if (scopeConfig) {
           return scopeConfig.scope.get(scopeid);

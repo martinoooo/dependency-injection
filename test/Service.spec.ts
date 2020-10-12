@@ -31,5 +31,18 @@ describe('Service', function () {
       expect(duck).toBeInstanceOf(Duck);
       expect(duck.bark()).toEqual('barking');
     });
+
+    it('can registy a non-singleton service', function () {
+      @Service({ transient: true })
+      class Duck {
+        bark() {
+          return 'barking';
+        }
+      }
+
+      let duck1 = Container.get<Duck>(Duck);
+      let duck2 = Container.get<Duck>(Duck);
+      expect(duck1).not.toBe(duck2);
+    });
   });
 });
