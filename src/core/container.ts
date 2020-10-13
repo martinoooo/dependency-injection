@@ -9,9 +9,13 @@ export class Container {
     this.scopes.set(scopeid, config);
   }
 
-  static registry(token: Token, injectval?: RegistryConfig): void {
+  static registry(token: Token, injectval?: RegistryConfig | Function): void {
     if (injectval) {
-      this.dicontainer.registry(token, injectval);
+      if (typeof injectval === 'function') {
+        this.dicontainer.registry(token, { imp: injectval });
+      } else {
+        this.dicontainer.registry(token, injectval);
+      }
     } else {
       this.dicontainer.registry(token, { imp: token });
     }

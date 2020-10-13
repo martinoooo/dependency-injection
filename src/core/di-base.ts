@@ -32,18 +32,29 @@ export class BaseDIContainer {
   private createInstance<T>(token: Token, value: RegistryConfig): T {
     const { imp } = value;
     const providers = Reflect.getMetadata('design:paramtypes', imp) || [];
-    const args = providers.map((provider: Constructor) => Container.get(this.scopeid, provider));
+    const args = this.initializeParams(imp, providers);
     const ins = new imp(...args);
     this.registry(token, { ...value, instance: ins });
     this.setInjectVal(imp, ins);
     return ins;
   }
 
+  private initializeParams(imp: Function, providers: any[]) {
+    const deps: DepsConfig[] = Reflect.getMetadata(depsMetadata, imp) || [];
+    return providers.map((provider: Constructor, index) => {
+      const paramDep = deps.find(dep => dep.index === index);
+      if (paramDep && paramDep.typeName()) return Container.get(this.scopeid, paramDep.typeName());
+      return Container.get(this.scopeid, provider);
+    });
+  }
+
   private setInjectVal(imp: Function, instance: { [key: string]: any }) {
     const deps: DepsConfig[] = Reflect.getMetadata(depsMetadata, imp.prototype) || [];
     deps.forEach(dep => {
-      const v = Container.get(this.scopeid, dep.typeName());
-      instance[dep.propertyKey] = v;
+      if (dep.propertyKey) {
+        const v = Container.get(this.scopeid, dep.typeName());
+        instance[dep.propertyKey] = v;
+      }
     });
   }
 }

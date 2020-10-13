@@ -3,7 +3,7 @@ export type Constructor<T = any> = new (...args: any[]) => T;
 
 export type ClassDecorator = <T extends { new (...args: any[]): {} }>(target: T) => T | void;
 
-export type Token = Constructor | string | Symbol | number;
+export type Token = Function | string | Symbol | number;
 
 export interface RegistryConfig {
   imp?: any;
@@ -18,6 +18,7 @@ export interface InjectConfig {
 export type DepsConfig = InjectConfig & {
   propertyKey: string;
   typeName: () => Constructor;
+  index?: number;
 };
 
 export interface ModuleConfig {
