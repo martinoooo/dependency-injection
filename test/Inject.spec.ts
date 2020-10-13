@@ -144,5 +144,13 @@ describe('Inject', function () {
       expect(coffeeMaker).toBeInstanceOf(CoffeeMaker);
       expect(coffeeMaker.make()).toEqual('sugar created');
     });
+
+    it('circular reference', async function () {
+      await import('../example/circular').then(({ CoffeeMaker }) => {
+        let coffeeMaker = Container.get<any>(CoffeeMaker);
+        expect(coffeeMaker).toBeInstanceOf(CoffeeMaker);
+        expect(coffeeMaker.make()).toEqual('SugarFactory make');
+      });
+    });
   });
 });

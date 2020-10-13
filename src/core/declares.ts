@@ -13,11 +13,12 @@ export interface RegistryConfig {
 
 export interface InjectConfig {
   token?: Token;
+  lazy?: Function;
 }
 
 export type DepsConfig = InjectConfig & {
   propertyKey: string;
-  typeName: () => Constructor;
+  typeName: Function;
   index?: number;
 };
 
