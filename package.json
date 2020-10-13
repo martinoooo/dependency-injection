@@ -1,11 +1,19 @@
 {
-  "name": "mydi",
-  "version": "1.0.0",
+  "name": "@martinoooo/dependency-injection",
+  "version": "0.0.1",
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "build": "tsc",
+    "build": "make build",
+    "test": "jest",
     "test:watch": "jest --watch"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/martinoooo/dependency-injection.git"
   },
   "dependencies": {
     "reflect-metadata": "^0.1.13",
