@@ -8,13 +8,9 @@ import { ClassDecorator, ModuleConfig, ScopeConfig } from '../core/declares';
  */
 export function Module(config: ModuleConfig): ClassDecorator {
   return function (target) {
-    const { providers = [] } = config;
-    const scope = new BaseDIContainer(target);
-    [...providers, target].forEach(item => {
-      scope.registry(item, { imp: item, instance: undefined });
-    });
-    Container.registryScope(target, {
-      scope,
+    const { providers = [], token } = config;
+    Container.registryModule({
+      token: token || target,
       imp: target,
       providers,
     });

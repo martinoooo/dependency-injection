@@ -1,12 +1,25 @@
-import { Constructor, Token, ScopeConfig, defaultContainer, RegistryConfig } from './declares';
+import { Constructor, Token, ScopeConfig, defaultContainer, RegistryConfig, ModuleConfig } from './declares';
 import { BaseDIContainer } from './di-base';
 
 export class Container {
   private static readonly dicontainer: BaseDIContainer = new BaseDIContainer(defaultContainer);
   private static readonly scopes = new Map<Token, ScopeConfig>();
 
-  static registryScope(scopeid: Constructor, config: ScopeConfig): void {
+  static registryScope(scopeid: Token, config: ScopeConfig): void {
+    if (scopeid === defaultContainer) return;
     this.scopes.set(scopeid, config);
+  }
+
+  static registryModule(config: ModuleConfig) {
+    const { providers = [], token = defaultContainer, imp } = config;
+    const scope = new BaseDIContainer(token);
+    [...providers, imp].forEach(item => {
+      scope.registry(item, { imp: item, instance: undefined });
+    });
+    Container.registryScope(token, {
+      scope,
+      providers,
+    });
   }
 
   static registry(token: Token, injectval?: RegistryConfig | Function): void {
