@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { Container, Inject, Module, Service } from '../src';
+import { Container, Inject } from '../src';
 
 describe('Inject', function () {
   beforeEach(() => Container.clear());

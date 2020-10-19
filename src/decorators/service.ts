@@ -1,9 +1,9 @@
 import { Container } from '../core/container';
-import { ClassDecorator, ServiceConfig, Scope } from '../core/declares';
+import { ClassDecorator, ServiceConfig } from '../core/declares';
 
 export function Service(config?: ServiceConfig): ClassDecorator {
   return function (target) {
-    const { token, scope = Scope.DEFAULT } = config || {};
-    Container.registry(token || target, { imp: target, instance: undefined, scope });
+    const { token, transient} = config || {};
+    Container.registry(token || target, { imp: target, instance: undefined, transient });
   };
 }

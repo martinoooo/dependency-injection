@@ -5,18 +5,14 @@ export class Container {
   private static readonly dicontainer: BaseDIContainer = new BaseDIContainer(defaultContainer);
   private static readonly scopes = new Map<Token, ScopeConfig>();
 
-  static registryScope(scopeid: Token, config: ScopeConfig): void {
-    if (scopeid === defaultContainer) return;
-    this.scopes.set(scopeid, config);
-  }
-
-  static registryModule(config: ModuleConfig) {
-    const { providers = [], token = defaultContainer, imp } = config;
+  static registryScope(config: ModuleConfig) {
+    const { providers = [], token, imp } = config;
+    if (!token) return;
     const scope = new BaseDIContainer(token);
     [...providers, imp].forEach(item => {
       scope.registry(item, { imp: item, instance: undefined });
     });
-    Container.registryScope(token, {
+    this.scopes.set(token, {
       scope,
       providers,
     });

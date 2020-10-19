@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { Container, Inject, Module, Service } from '../src';
+import { Container, Inject, Scope, Service } from '../src';
 
 describe('Module', function () {
   describe('registry', () => {
@@ -19,7 +19,7 @@ describe('Module', function () {
       }
     }
 
-    @Module({
+    @Scope({
       providers: [Provider, Consumer],
     })
     class App {

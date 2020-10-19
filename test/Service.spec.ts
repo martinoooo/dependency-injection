@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { Container, Inject, Module, Service, Scope } from '../src';
+import { Container, Inject, Scope, Service } from '../src';
 
 describe('Service', function () {
   beforeEach(() => Container.clear());
@@ -33,7 +33,7 @@ describe('Service', function () {
     });
 
     it('can registy a non-singleton service', function () {
-      @Service({ scope: Scope.TRANSIENT })
+      @Service({ transient: true })
       class Duck {
         bark() {
           return 'barking';
@@ -73,12 +73,12 @@ describe('Service', function () {
       }
 
       const moduleToken1 = 'test1';
-      Container.registryModule({ token: moduleToken1, providers: [Duck], imp: Con });
+      Container.registryScope({ token: moduleToken1, providers: [Duck], imp: Con });
       let duck1 = Container.get<Con>(moduleToken1, Con);
       const promise1 = duck1.getDuck(1);
 
       const moduleToken2 = 'test2';
-      Container.registryModule({ token: moduleToken2, providers: [Duck], imp: Con });
+      Container.registryScope({ token: moduleToken2, providers: [Duck], imp: Con });
       let duck2 = Container.get<Con>(moduleToken2, Con);
       const promise2 = duck2.getDuck(1000);
 

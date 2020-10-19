@@ -1,4 +1,4 @@
-import { Constructor, Token, RegistryConfig, DepsConfig, depsMetadata, Scope } from './declares';
+import { Constructor, Token, RegistryConfig, DepsConfig, depsMetadata } from './declares';
 import { Container } from './container';
 
 export class BaseDIContainer {
@@ -30,11 +30,11 @@ export class BaseDIContainer {
   }
 
   private createInstance<T>(token: Token, value: RegistryConfig): T {
-    const { imp, scope } = value;
+    const { imp, transient } = value;
     const providers = Reflect.getMetadata('design:paramtypes', imp) || [];
     const args = this.initializeParams(imp, providers);
     const ins = new imp(...args);
-    if (scope !== Scope.TRANSIENT) {
+    if (!transient) {
       this.registry(token, { ...value, instance: ins });
     }
     this.setInjectVal(imp, ins);

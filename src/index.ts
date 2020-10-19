@@ -3,5 +3,5 @@ import 'reflect-metadata';
 export { Container } from './core/container';
 export { Service } from './decorators/service';
 export { Inject } from './decorators/inject';
-export { Module } from './decorators/module';
+export { Scope } from './decorators/scope';
 export * from './core/declares';
