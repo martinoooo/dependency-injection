@@ -18,6 +18,10 @@ export class Container {
     });
   }
 
+  static deleteScope(token: Token) {
+    this.scopes.delete(token);
+  }
+
   static registry(token: Token, injectval?: RegistryConfig | Function): void {
     if (injectval) {
       if (typeof injectval === 'function') {
