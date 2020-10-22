@@ -10,6 +10,7 @@ describe('Module', function () {
       }
     }
 
+    @Service()
     class Consumer {
       @Inject()
       private provider: Provider;
@@ -20,7 +21,7 @@ describe('Module', function () {
     }
 
     @Scope({
-      providers: [Provider, Consumer],
+      providers: [Provider, { token: 'consumer', imp: Consumer }],
     })
     class App {
       @Inject()
@@ -36,7 +37,7 @@ describe('Module', function () {
     }
 
     it('can registy the module', function () {
-      const app = Container.get<App>(App);
+      const app = Container.get<App>(App, App);
       expect(app.init()).toBe("I'm init");
     });
 
@@ -52,10 +53,10 @@ describe('Module', function () {
     });
 
     it('Inject works well', function () {
-      const consumer = Container.get<Provider>(App, Consumer);
+      const consumer = Container.get<Provider>(App, 'consumer');
       expect(consumer.read()).toBe('read');
 
-      const app = Container.get<App>(App);
+      const app = Container.get<App>(App, App);
       expect(app.read()).toBe('read');
     });
   });

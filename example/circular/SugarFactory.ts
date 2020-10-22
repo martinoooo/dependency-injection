@@ -1,4 +1,4 @@
-import { Container, Inject, Module, Service } from '../../src';
+import { Container, Inject, Service } from '../../src';
 import { CoffeeMaker } from './CoffeeMaker';
 
 @Service()

@@ -10,10 +10,16 @@ export class Container {
     if (!token) return;
     const scope = new BaseDIContainer(token);
     [...providers, imp].forEach(item => {
-      scope.registry(item, { imp: item, instance: undefined });
+      if (typeof item === 'function') {
+        scope.registry(item, { imp: item, instance: undefined });
+      } else {
+        const { token } = item;
+        scope.registry(token, { ...item });
+      }
     });
     this.scopes.set(token, {
       scope,
+      // other inform
       providers,
     });
   }
@@ -40,24 +46,23 @@ export class Container {
       token = undefined;
     }
     if (token) {
-      // means get instance from scoped container
-      const scopeConfig = this.scopes.get(scopeid);
-      if (scopeConfig) {
-        return scopeConfig.scope.get(token);
-      }
-      throw new Error('还未注册该module');
-    } else {
       try {
-        return this.dicontainer.get<T>(scopeid);
-      } catch {
-        // if not in dicontainer, that means it's not a service, it'a a module;
+        // means get instance from scoped container
         const scopeConfig = this.scopes.get(scopeid);
         if (scopeConfig) {
-          return scopeConfig.scope.get(scopeid);
+          return scopeConfig.scope.get(token);
         }
-        throw new Error(`还未注册该module ${scopeid}`);
+        throw new Error('还未注册该module');
+      } catch {
+        return this.dicontainer.get<T>(token);
       }
+    } else {
+      return this.dicontainer.get<T>(scopeid);
     }
+  }
+
+  static getServerConfig(token: Token) {
+    return this.dicontainer.getConfig(token);
   }
 
   static clear() {

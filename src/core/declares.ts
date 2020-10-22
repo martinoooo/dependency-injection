@@ -24,14 +24,13 @@ export type DepsConfig = InjectConfig & {
 
 export interface ModuleConfig {
   token?: Token;
-  providers?: Constructor[];
+  providers?: Array<Constructor | (RegistryConfig & { token: Token })>;
   imp?: any;
 }
 
 export interface ScopeConfig {
   scope: BaseDIContainer;
-  imp?: any;
-  providers: Constructor[];
+  providers: Array<Constructor | (RegistryConfig & { token: Token })>;
 }
 
 export interface ServiceConfig {

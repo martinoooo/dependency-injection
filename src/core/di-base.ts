@@ -22,7 +22,11 @@ export class BaseDIContainer {
       }
       return instance;
     }
-    throw new Error('没有获取到token的值');
+    throw new Error(`没有获取到token:${token}的值`);
+  }
+
+  public getConfig(token: Token): RegistryConfig | undefined {
+    return this.services.get(token);
   }
 
   public reset() {
