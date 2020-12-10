@@ -42,13 +42,13 @@ describe('Module', function () {
     });
 
     it('the service got from the module is different from the global', function () {
-      const provider_in_module = Container.get<Provider>(App, Provider);
-      const provider_in_global = Container.get<Provider>(Provider);
+      const provider_in_module = Container.get(App, Provider);
+      const provider_in_global = Container.get(Provider);
       expect(provider_in_module).not.toBe(provider_in_global);
     });
 
     it('can registry the service in module', function () {
-      const provider = Container.get<Provider>(App, Provider);
+      const provider = Container.get(App, Provider);
       expect(provider.read()).toBe('read');
     });
 

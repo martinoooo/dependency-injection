@@ -1,4 +1,4 @@
-import { Constructor, Token, ScopeConfig, defaultContainer, RegistryConfig, ModuleConfig } from './declares';
+import { Token, ScopeConfig, defaultContainer, RegistryConfig, ModuleConfig, ObjectType } from './declares';
 import { BaseDIContainer } from './di-base';
 
 export class Container {
@@ -40,6 +40,10 @@ export class Container {
     }
   }
 
+  static get<T>(type: ObjectType<T>): T;
+  static get<T>(type: Token): T;
+  static get<T>(scopeid: Token, token?: ObjectType<T>): T;
+  static get<T>(scopeid: Token, token?: Token): T;
   static get<T>(scopeid: Token, token?: Token): T {
     if (token && scopeid === defaultContainer) {
       scopeid = token;

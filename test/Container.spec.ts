@@ -13,7 +13,7 @@ describe('Container', function () {
 
     it('can registy a class', function () {
       Container.registry(Duck);
-      let duck = Container.get<Duck>(Duck);
+      let duck = Container.get(Duck);
 
       expect(duck).toBeInstanceOf(Duck);
       expect(duck.bark()).toEqual('barking');

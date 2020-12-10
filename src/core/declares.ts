@@ -5,6 +5,8 @@ export type ClassDecorator = <T extends { new (...args: any[]): {} }>(target: T)
 
 export type Token = Function | string | Symbol | number;
 
+export type ObjectType<T> = { new (...args: any[]): T };
+
 export interface RegistryConfig {
   imp?: any;
   instance?: any;
