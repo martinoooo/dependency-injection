@@ -63,9 +63,9 @@ describe('Service', function () {
 
         public async getDuck(num: number) {
           this.duck.setDuck(num);
-          await new Promise(resolve => {
+          await new Promise<void>(resolve => {
             setTimeout(() => {
-              resolve();
+              resolve()
             }, num);
           });
           return this.duck.bark();
@@ -118,7 +118,7 @@ describe('Service', function () {
           private beanFactory: BeanFactory,
           private sugarFactory: SugarFactory,
           private waterFactory: WaterFactory
-        ) {}
+        ) { }
 
         make() {
           return `${this.beanFactory.create()}, ${this.sugarFactory.create()}, ${this.waterFactory.create()}, coffee is made`;
